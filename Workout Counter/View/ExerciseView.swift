@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 import AudioToolbox
 
-struct ActivityView: View {
+struct ExerciseView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
 //    @ObservedObject var model: ActionsListModel
@@ -182,6 +182,6 @@ struct ContentView_Previews: PreviewProvider {
         let activity = Activity(context: PersistenceController.preview.container.viewContext)
         activity.title = "Віджимання"
         
-        return ActivityView(activity: activity).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        return ExerciseView(activity: activity).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

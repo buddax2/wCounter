@@ -1,5 +1,5 @@
 //
-//  AddNewActivity.swift
+//  AddNewExerciseView.swift
 //  Workout Counter
 //
 //  Created by Oleksandr Yakubchyk on 12.02.2022.
@@ -8,7 +8,7 @@
 import SwiftUI
 import AudioToolbox
 
-struct AddNewActivity: View {
+struct AddNewExerciseView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @State private var title: String = ""
@@ -16,11 +16,11 @@ struct AddNewActivity: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("Activity name")
+            Text("New exercise")
                 .font(.title3).bold()
                 .foregroundColor(Color.black)
             
-            TextField("Enter your activity here", text: $title)
+            TextField("Exercise name", text: $title)
                 .textFieldStyle(.roundedBorder)
             
             Button {
@@ -64,6 +64,6 @@ struct AddNewActivity_Previews: PreviewProvider {
     static var previews: some View {
         let viewContext = PersistenceController.shared.container.viewContext
 
-        return AddNewActivity().environment(\.managedObjectContext, viewContext)
+        return AddNewExerciseView().environment(\.managedObjectContext, viewContext)
     }
 }

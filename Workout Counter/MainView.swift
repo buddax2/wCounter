@@ -24,19 +24,20 @@ struct MainView: View {
             List {
                 ForEach(items) { item in
                     NavigationLink {
-                        ActivityView(activity: item).environment(\.managedObjectContext, viewContext)
+                        ExerciseView(activity: item).environment(\.managedObjectContext, viewContext)
                     } label: {
                         Text(item.wrappedTitle)
                     }
                 }
                 .onDelete(perform: deleteItems)
             }
+            .navigationTitle("Exercises")
             .toolbar {
                 ToolbarItem {
                     Button {
                         showAddTaskView.toggle()
                     } label: {
-                        Label("Add Item", systemImage: "plus")
+                        Label("Add Item", systemImage: "plus.circle")
                     }
                 }
             }
@@ -48,7 +49,7 @@ struct MainView: View {
             UITableViewCell.appearance().backgroundColor = UIColor.clear
         }
         .sheet(isPresented: $showAddTaskView) {
-            AddNewActivity()
+            AddNewExerciseView()
                 .environment(\.managedObjectContext, viewContext)
         }
     }
