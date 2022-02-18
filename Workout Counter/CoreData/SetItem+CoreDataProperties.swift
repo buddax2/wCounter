@@ -18,10 +18,15 @@ extension SetItem {
 
     @NSManaged public var counter: Int64
     @NSManaged public var timestamp: Date?
+    @NSManaged public var endTime: Date?
     @NSManaged public var origin: Activity?
 
     public var wrappedTimestamp: Date {
         timestamp ?? Date()
+    }
+    
+    public var wrappedEndTime: Date {
+        endTime ?? wrappedTimestamp
     }
 }
 

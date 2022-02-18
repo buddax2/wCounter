@@ -10,96 +10,99 @@ import CoreData
 import AudioToolbox
 
 struct ExerciseView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+//    @Environment(\.managedObjectContext) private var viewContext
 
-//    @ObservedObject var model: ActionsListModel
+    @StateObject var model: WorkoutListModel
     
-    private var items: FetchRequest<SetItem>
+//    private var items: FetchRequest<SetItem>
     
     
-    let activity: Activity
+//    let activity: Activity
     
     @State private var showAddTaskView = false
     @State private var selectedItem: Date? = nil
 
-    init(activity: Activity) {
-        self.activity = activity
-        items = FetchRequest<SetItem>(entity: SetItem.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \SetItem.timestamp, ascending: false)], predicate: NSPredicate(format: "origin.title == %@", activity.wrappedTitle))
-        
-//        model = ActionsListModel(context: context, parentActivity: activity)
-    }
+//    init(dataModel: ActionsListModel) {
+//        self.model = dataModel
+//        items = FetchRequest<SetItem>(entity: SetItem.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \SetItem.timestamp, ascending: false)], predicate: NSPredicate(format: "origin.title == %@", model.parent.wrappedTitle))
+//    }
 
-    struct SectionItem: Identifiable, Hashable {
-        let id: String
-        var items = [SetItem]()
-    }
+//    struct SectionItem: Identifiable, Hashable {
+//        let id: String
+//        var items = [SetItem]()
+//    }
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+        ZStack(alignment: .bottom) {
             
             VStack {
                 List {
-                    ForEach(items.wrappedValue) { item in
-                        NavigationLink(tag: item.wrappedTimestamp, selection: $selectedItem, destination: {
-                            CounterView(item: item)
-                        }, label: {
-                            HStack {
-                                Text(item.timestamp!, formatter: sectionFormatter).font(.footnote).foregroundColor(.secondary)
-                                Text(item.timestamp!, formatter: itemFormatter).font(.body)
-
-                                Spacer()
-
-                                Text("\(item.counter)")
-                            }
-                        })
-                    }
-                    .onDelete(perform: deleteItems)
-//                    ForEach(model.items, id:\.self) { sectionItem in
-//                    Section(sectionItem.id) {
-//                        ForEach(sectionItem.items) { item in
-//                            NavigationLink {
-//                                CounterView(item: item)
-//                            } label: {
-//                                HStack {
-//                                    Text(item.timestamp!, formatter: itemFormatter)
+//                    ForEach(items.wrappedValue) { item in
+//                        NavigationLink(tag: item.wrappedTimestamp, selection: $selectedItem, destination: {
+//                            CounterView(item: item)
+//                        }, label: {
+//                            HStack {
+//                                Text(item.timestamp!, formatter: sectionFormatter).font(.footnote).foregroundColor(.secondary)
+//                                Text(item.timestamp!, formatter: itemFormatter).font(.body)
 //
-//                                    Spacer()
+//                                Spacer()
 //
-//                                    Text("\(item.counter)")
-//                                }
+//                                Text("\(item.counter)")
 //                            }
-//                        }
-//                        .onDelete { indexSet in
-//                            model.deleteItem(offsets: indexSet)
-//                        }
+//                        })
 //                    }
-//                }
+//                    .onDelete(perform: deleteItems)
+                    ForEach(model.sections, id: \.self) { sectionItem in
+                        Section(sectionItem.id) {
+                            ForEach(sectionItem.items) { item in
+//                                NavigationLink {
+//                                    CounterView(item: item, model: model)
+//                                } label: {
+                                    HStack {
+                                        Text(item.wrappedTimestamp, formatter: itemFormatter)
+
+                                        Spacer()
+
+                                        Text("\(item.counter)")
+                                    }
+//                                }
+                            }
+                            .onDelete { indexSet in
+                                model.deleteItem(offsets: indexSet)
+                            }
+                        }
+                    }
                 }
             }
-//            .toolbar {
-//                ToolbarItem(placement: .automatic) {
-//                    VStack {
-//                        Text("Сьогодні: \(model.items.first?.items.filter({ Calendar.current.isDateInToday($0.wrappedTimestamp) == true }).reduce(0, { partialResult, item in partialResult + item.counter }) ?? 0)")
-//                            .font(.footnote)
-//                            .padding(.leading, 8)
-//                    }
-//                }
-//            }
-            .navigationTitle(activity.wrappedTitle)
-
-            
-            SmallAddButton()
-                .padding()
-                .onTapGesture {
-//                    let newItem = model.createNewItem()
-                    let newItem = addItem()
-
-                    DispatchQueue.main.asyncAfter(deadline: .now()+0.1, execute: {
-                        selectedItem = newItem.wrappedTimestamp
-                    })
-                    
-//                    showAddTaskView.toggle()
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    VStack {
+                        Text("Сьогодні: \(model.sections.first?.items.filter({ Calendar.current.isDateInToday($0.wrappedTimestamp) == true }).reduce(0, { partialResult, item in partialResult + item.counter }) ?? 0)")
+                            .font(.footnote)
+                            .padding(.leading, 8)
+                    }
                 }
+            }
+            .navigationTitle(model.parent.wrappedTitle)
+
+            NavigationLink {
+                CounterView(item: model.createNewItem(), model: model)
+            } label: {
+                SmallAddButton()
+                    .padding()
+            }
+//            SmallAddButton()
+//                .padding()
+//                .onTapGesture {
+//                    let newItem = model.createNewItem()
+////                    let newItem = addItem()
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now()+0.1, execute: {
+//                        selectedItem = newItem.wrappedTimestamp
+//                    })
+//
+////                    showAddTaskView.toggle()
+//                }
         }
 //        onAppear {
 //            model.update()
@@ -108,43 +111,43 @@ struct ExerciseView: View {
         .background(Color.white)
     }
 
-    private func addItem() -> SetItem {
-        AudioServicesPlaySystemSound(1519) // Actuate `Peek` feedback (weak boom)
-
-        let newItem = SetItem(context: viewContext)
-        newItem.timestamp = Date()
-        newItem.origin = activity
-
-        withAnimation {
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-
-        return newItem
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        AudioServicesPlaySystemSound(1519) // Actuate `Peek` feedback (weak boom)
-
-        withAnimation {
-            offsets.map { items.wrappedValue[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
+//    private func addItem() -> SetItem {
+//        AudioServicesPlaySystemSound(1519) // Actuate `Peek` feedback (weak boom)
+//
+//        let newItem = SetItem(context: viewContext)
+//        newItem.timestamp = Date()
+//        newItem.origin = model.parent
+//
+//        withAnimation {
+//            do {
+//                try viewContext.save()
+//            } catch {
+//                // Replace this implementation with code to handle the error appropriately.
+//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//                let nsError = error as NSError
+//                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+//            }
+//        }
+//
+//        return newItem
+//    }
+//
+//    private func deleteItems(offsets: IndexSet) {
+//        AudioServicesPlaySystemSound(1519) // Actuate `Peek` feedback (weak boom)
+//
+//        withAnimation {
+//            offsets.map { items.wrappedValue[$0] }.forEach(viewContext.delete)
+//
+//            do {
+//                try viewContext.save()
+//            } catch {
+//                // Replace this implementation with code to handle the error appropriately.
+//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//                let nsError = error as NSError
+//                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+//            }
+//        }
+//    }
 //
 //    private func sectionsArray(_ items: FetchRequest<SetItem>) -> [SectionItem] {
 //        var result = [SectionItem]()
@@ -182,6 +185,8 @@ struct ContentView_Previews: PreviewProvider {
         let activity = Activity(context: PersistenceController.preview.container.viewContext)
         activity.title = "Віджимання"
         
-        return ExerciseView(activity: activity).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        let model = WorkoutListModel(parent: activity)
+        
+        return ExerciseView(model: model).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

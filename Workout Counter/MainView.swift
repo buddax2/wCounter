@@ -24,7 +24,9 @@ struct MainView: View {
             List {
                 ForEach(items) { item in
                     NavigationLink {
-                        ExerciseView(activity: item).environment(\.managedObjectContext, viewContext)
+                        let model = WorkoutListModel(parent: item)
+                        ExerciseView(model: model)
+//                        ExerciseView(dataModel: model).environment(\.managedObjectContext, viewContext)
                     } label: {
                         Text(item.wrappedTitle)
                     }

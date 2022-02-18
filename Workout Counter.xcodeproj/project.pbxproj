@@ -17,7 +17,7 @@
 		27513B4827A9756500262088 /* Workout_CounterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27513B4727A9756500262088 /* Workout_CounterUITests.swift */; };
 		27513B4A27A9756500262088 /* Workout_CounterUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27513B4927A9756500262088 /* Workout_CounterUITestsLaunchTests.swift */; };
 		27513B5727A976D500262088 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27513B5627A976D500262088 /* CounterView.swift */; };
-		27AB511927BAEDFC004D8527 /* ActionsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AB511827BAEDFC004D8527 /* ActionsListModel.swift */; };
+		27AB511927BAEDFC004D8527 /* WorkoutListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AB511827BAEDFC004D8527 /* WorkoutListModel.swift */; };
 		27B610F827B7237600291069 /* SetItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B610F427B7237600291069 /* SetItem+CoreDataClass.swift */; };
 		27B610F927B7237600291069 /* SetItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B610F527B7237600291069 /* SetItem+CoreDataProperties.swift */; };
 		27B610FA27B7237600291069 /* Activity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B610F627B7237600291069 /* Activity+CoreDataClass.swift */; };
@@ -58,7 +58,7 @@
 		27513B4727A9756500262088 /* Workout_CounterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout_CounterUITests.swift; sourceTree = "<group>"; };
 		27513B4927A9756500262088 /* Workout_CounterUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout_CounterUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		27513B5627A976D500262088 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
-		27AB511827BAEDFC004D8527 /* ActionsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsListModel.swift; sourceTree = "<group>"; };
+		27AB511827BAEDFC004D8527 /* WorkoutListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListModel.swift; sourceTree = "<group>"; };
 		27B610F427B7237600291069 /* SetItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SetItem+CoreDataClass.swift"; sourceTree = "<group>"; };
 		27B610F527B7237600291069 /* SetItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SetItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		27B610F627B7237600291069 /* Activity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Activity+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 		27AB511727BAEDDC004D8527 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				27AB511827BAEDFC004D8527 /* ActionsListModel.swift */,
+				27AB511827BAEDFC004D8527 /* WorkoutListModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -323,7 +323,7 @@
 				27B610F927B7237600291069 /* SetItem+CoreDataProperties.swift in Sources */,
 				27513B2827A9756200262088 /* Workout_CounterApp.swift in Sources */,
 				27513B5727A976D500262088 /* CounterView.swift in Sources */,
-				27AB511927BAEDFC004D8527 /* ActionsListModel.swift in Sources */,
+				27AB511927BAEDFC004D8527 /* WorkoutListModel.swift in Sources */,
 				27B6110327B8397100291069 /* SmallAddButton.swift in Sources */,
 				27B610F827B7237600291069 /* SetItem+CoreDataClass.swift in Sources */,
 				27B610FB27B7237600291069 /* Activity+CoreDataProperties.swift in Sources */,

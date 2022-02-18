@@ -12,6 +12,12 @@ struct CounterView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @StateObject var item: SetItem
+    @StateObject var model: WorkoutListModel
+//    var model: ActionsListModel
+//
+//    init(item: SetItem, dataModel: ActionsListModel) {
+//        self.model = dataModel
+//    }
     
     var body: some View {
         VStack(spacing: 30) {
@@ -29,6 +35,19 @@ struct CounterView: View {
             
             Spacer()
         }
+        .onDisappear {
+            item.endTime = Date()
+            
+            let duration = item.wrappedEndTime.timeIntervalSince(item.wrappedTimestamp)
+            print("Duration: \(duration)")
+            
+            model.save()
+            model.update()
+        }
+        .onAppear {
+            let duration = item.wrappedEndTime.timeIntervalSince(item.wrappedTimestamp)
+            print("Duration at start: \(duration)")
+        }
     }
     
     private func add() {
@@ -38,12 +57,15 @@ struct CounterView: View {
 
         do {
             try viewContext.save()
+            model.update()
         } catch {
             // Replace this implementation with code to handle the error appropriately.
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
+        
+        print(item.counter)
     }
 }
 
@@ -52,10 +74,15 @@ struct CounterView_Previews: PreviewProvider {
     static var previews: some View {
         let viewContext = PersistenceController.shared.container.viewContext
         
+        let activity = Activity(context: viewContext)
+
         let newItem = SetItem(context: viewContext)
         newItem.timestamp = Date()
+        newItem.origin = activity
         
-        return CounterView(item: newItem).environment(\.managedObjectContext, viewContext)
+        
+        let newModel = WorkoutListModel(parent: activity)
+        return CounterView(item: newItem, model: newModel).environment(\.managedObjectContext, viewContext)
     }
 }
 
